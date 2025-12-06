@@ -53,3 +53,42 @@ A professional, "catchy" UI built with Streamlit featuring:
 ├── transactions.csv         # Generated dataset (created after running step 1)
 ├── requirements.txt         # List of dependencies
 └── README.md                # Project documentation
+
+```
+⚡ How to Run the Project
+Prerequisites
+Make sure you have Python installed. It is recommended to use a virtual environment.
+
+Step 1: Install Dependencies
+Bash
+
+pip install pandas numpy scikit-learn matplotlib seaborn plotly streamlit
+Step 2: Generate Data
+Run the data generation script to create the synthetic dataset (transactions.csv).
+
+Bash
+
+python generate_fake_data.py
+Step 3: Launch the Dashboard
+Run the Streamlit app. This will train the model in the background and open the dashboard in your browser.
+
+Bash
+
+streamlit run dashboard.py
+📸 Dashboard Preview
+1. Live Monitor
+Real-time tracking of transaction volume and fraud attempts. (Add screenshot here)
+
+2. AI Simulation
+Test the model by inputting custom transaction details. (Add screenshot here)
+
+🔮 Future Roadmap
+
+Streaming Integration: Implement Apache Kafka for handling high-throughput real-time data.
+
+Deep Learning: Integrate Autoencoders for unsupervised anomaly detection.
+
+Graph Analysis: Use Neo4j to detect fraud rings and connected entities.
+
+📝 License
+This project is open-source and available under the MIT License.
