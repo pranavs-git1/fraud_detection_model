@@ -3,7 +3,6 @@ import numpy as np
 import random
 from datetime import datetime, timedelta
 
-# Configuration
 N_CUSTOMERS = 1000
 N_TRANSACTIONS = 20000
 FRAUD_RATE = 0.10
@@ -11,7 +10,6 @@ FRAUD_RATE = 0.10
 LOCATIONS = ['New York', 'London', 'Tokyo', 'Mumbai', 'San Francisco', 'Unknown', 'Paris']
 DEVICES = ['Mobile', 'Desktop', 'Tablet', 'Emulator', 'POS']
 
-# Generate customer IDs
 customer_ids = [f'C_{i:05d}' for i in range(1, N_CUSTOMERS + 1)]
 
 
@@ -23,16 +21,14 @@ def create_fake_transactions(n):
     print(f"Generating {n} transactions...")
 
     for i in range(n):
-        # Basic transaction details
         cust_id = random.choice(customer_ids)
         timestamp = start_date + timedelta(days=random.uniform(0, 364), hours=random.uniform(0, 23),
                                            minutes=random.uniform(0, 59))
 
-        # Default values
         is_fraud = False
         amount = round(random.uniform(5.0, 300.0), 2)
-        location = random.choice(LOCATIONS[:-1])  # Pick a normal location
-        device = random.choice(DEVICES[:-2])  # Pick a normal device
+        location = random.choice(LOCATIONS[:-1])  
+        device = random.choice(DEVICES[:-2])  
 
         if random.random() < FRAUD_RATE:
             is_fraud = True
@@ -44,7 +40,7 @@ def create_fake_transactions(n):
             elif fraud_type == 'unknown_location':
                 location = 'Unknown'
                 amount = round(random.uniform(100.0, 1500.0), 2)
-            else:  # emulator
+            else:  
                 device = 'Emulator'
                 amount = round(random.uniform(50.0, 800.0), 2)
 
@@ -64,14 +60,9 @@ def create_fake_transactions(n):
 
 if __name__ == "__main__":
     transactions_data = create_fake_transactions(N_TRANSACTIONS)
-
-    # Create DataFrame
     df = pd.DataFrame(transactions_data)
-
-    # Save to CSV
     output_file = 'transactions.csv'
     df.to_csv(output_file, index=False)
-
     print(f"Successfully generated and saved {len(df)} transactions to {output_file}")
     print("\nData preview:")
     print(df.head())
