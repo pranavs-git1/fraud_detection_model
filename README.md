@@ -15,18 +15,18 @@ The system features a **Random Forest Classifier** trained on transaction behavi
 
 ## Key Features
 
-### 1. 🧠 Intelligent Fraud Detection Model
+### 1. Intelligent Fraud Detection Model
 * Utilizes a **Random Forest Classifier** robust against overfitting.
 * Handles imbalanced data (fraud is rare, ~2%) using class weighting.
 * Evaluated using **ROC-AUC** and **Confusion Matrix** for precision[cite: 5].
 
-### 2. ⏳ Advanced Feature Engineering
+### 2. Advanced Feature Engineering
 To improve accuracy, the model doesn't just look at raw numbers; it understands context:
 * **Time Since Last Transaction:** Detects impossible travel (e.g., two transactions in different cities within seconds).
 * **Velocity Checks:** Tracks transaction frequency (e.g., 20 transactions in 1 hour)[cite: 5].
 * **Temporal Analysis:** Identifies high-risk hours (e.g., 3:00 AM) and days.
 
-### 3. 📊 Interactive Dashboard
+### 3. Interactive Dashboard
 A professional, "catchy" UI built with Streamlit featuring:
 * **Live Overview:** Real-time KPIs (Total Fraud, Blocked Value) and neon-styled charts[cite: 1].
 * **Deep Dive Analysis:** 3D Scatter plots and Heatmaps to visualize fraud clusters.
@@ -34,7 +34,7 @@ A professional, "catchy" UI built with Streamlit featuring:
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 * **Language:** Python 3.x
 * **Data Processing:** Pandas, NumPy
@@ -45,7 +45,7 @@ A professional, "catchy" UI built with Streamlit featuring:
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```bash
 ├── generate_fake_data.py    # Script to create realistic synthetic transaction data
@@ -95,3 +95,9 @@ Graph Analysis: Use Neo4j to detect fraud rings and connected entities.
 
 ## License
 This project is open-source and available under the MIT License.
+
+<img width="800" height="500" alt="eda_fraud_distribution" src="https://github.com/user-attachments/assets/6e6d773d-6b8e-4eb9-9369-05430e8f8746" />
+<img width="1200" height="600" alt="eda_amount_distribution" src="https://github.com/user-attachments/assets/47898e8f-003f-427f-8070-5d3e22a56e15" />
+<img width="800" height="600" alt="model_confusion_matrix" src="https://github.com/user-attachments/assets/587df651-4f0c-44d0-b331-0211e387aa95" />
+<img width="1200" height="600" alt="eda_hourly_fraud" src="https://github.com/user-attachments/assets/29d36eca-e2b5-49c0-8802-ba3af853024c" />
+
