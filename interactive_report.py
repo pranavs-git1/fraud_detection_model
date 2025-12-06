@@ -10,14 +10,11 @@ def create_interactive_plot(filepath):
     df = pd.read_csv(filepath)
     df['timestamp'] = pd.to_datetime(df['timestamp'])
 
-    # Convert 'is_fraud' to a categorical string for better plot labels
     df['Status'] = df['is_fraud'].map({0: 'Legitimate', 1: 'Fraud'})
 
     print("Generating interactive scatter plot...")
-    # Create an interactive 3D scatter plot
-    # This helps visualize clusters of fraud
     fig = px.scatter_3d(
-        df.sample(n=3000),  # Sample to keep the plot fast
+        df.sample(n=3000),  
         x='amount',
         y='timestamp',
         z='location',
@@ -27,10 +24,8 @@ def create_interactive_plot(filepath):
         hover_data=['transaction_id', 'device']
     )
 
-    # Set a dark theme
     fig.update_layout(template='plotly_dark')
 
-    # Save to HTML
     output_filename = 'interactive_fraud_report.html'
     pio.write_html(fig, file=output_filename, auto_open=False)
 
