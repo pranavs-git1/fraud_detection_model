@@ -112,7 +112,6 @@ st.title("Financial Fraud Detection Model & Analytics Dashboard")
 raw_data = load_data('transactions.csv')
 
 if raw_data is not None:
-    # Create sidebar navigation
     st.sidebar.title("Navigation")
     page = st.sidebar.radio("Go to:", ["Overview", "Exploratory Data Analysis", "Fraud Model & Simulation"])
 
@@ -137,7 +136,7 @@ if raw_data is not None:
         col1, col2 = st.columns(2)
 
         with col1:
-            # Viz 1: Fraud vs. Legitimate Over Time (Plotly)
+            # Viz 1
             st.write("##### Fraud vs. Legitimate Transactions Over Time")
             daily_summary = raw_data.set_index('timestamp').resample('D').agg(
                 fraud_count=('is_fraud', 'sum'),
@@ -152,7 +151,7 @@ if raw_data is not None:
             st.plotly_chart(fig1, use_container_width=True)
 
         with col2:
-            # Viz 2: Fraud Count by Location (Plotly)
+            # Viz 2
             st.write("##### Fraud Count by Location")
             fraud_by_loc = raw_data[raw_data['is_fraud'] == 1]['location'].value_counts().reset_index()
             fig2 = px.bar(fraud_by_loc.head(10), x='location', y='count', title="Top 10 Fraud Locations",
@@ -160,7 +159,7 @@ if raw_data is not None:
             fig2.update_layout(template='plotly_dark')
             st.plotly_chart(fig2, use_container_width=True)
 
-        # Viz 3: Fraud Amount Distribution (Plotly)
+        # Viz 3
         st.write("##### Fraud vs. Legitimate Amount Distribution")
         fig3 = px.histogram(raw_data, x='amount', color='is_fraud', marginal='box',
                             title="Distribution of Transaction Amounts",
@@ -169,14 +168,12 @@ if raw_data is not None:
         st.plotly_chart(fig3, use_container_width=True)
 
 
-    #EDA
+    #eda
     elif page == "Exploratory Data Analysis":
         st.header("Exploratory Data Analysis (EDA)")
 
-        # Load feature-engineered data for this page
         df_feat = advanced_feature_engineering(raw_data.copy())
 
-        # Add an interactive filter
         st.sidebar.subheader("EDA Filters")
         amount_range = st.sidebar.slider(
             "Filter by Transaction Amount:",
@@ -185,7 +182,6 @@ if raw_data is not None:
             value=(float(raw_data['amount'].min()), float(raw_data['amount'].max()))
         )
 
-        # Filter data based on slider
         filtered_df = df_feat[
             (df_feat['amount'] >= amount_range[0]) &
             (df_feat['amount'] <= amount_range[1])
@@ -197,7 +193,7 @@ if raw_data is not None:
         col1, col2 = st.columns(2)
 
         with col1:
-            # Viz 4: Time Since Last Transaction (Plotly)
+            # Viz 4
             st.write("##### Time Since Last Transaction (Log Scale)")
             filtered_df['log_time_since'] = np.log1p(filtered_df['time_since_last_tx_seconds'])
             fig4 = px.histogram(filtered_df.dropna(), x='log_time_since', color='is_fraud',
@@ -206,7 +202,7 @@ if raw_data is not None:
             st.plotly_chart(fig4, use_container_width=True)
 
         with col2:
-            # Viz 5: Transaction Count in Last 1H (Plotly)
+            # Viz 5
             st.write("##### Transaction Count in Last 1 Hour")
             filtered_df['tx_count_last_1h_clipped'] = filtered_df['tx_count_last_1h'].clip(upper=10)
             fig5 = px.histogram(filtered_df.dropna(), x='tx_count_last_1h_clipped', color='is_fraud',
@@ -218,7 +214,7 @@ if raw_data is not None:
         col1, col2 = st.columns(2)
 
         with col1:
-            # Viz 6: Fraud by Device (Seaborn)
+            # Viz 6
             st.write("##### Fraud by Device Type")
             fig, ax = plt.subplots()
             sns.countplot(data=filtered_df, x='device', hue='is_fraud', ax=ax, palette='pastel')
@@ -226,7 +222,7 @@ if raw_data is not None:
             st.pyplot(fig)
 
         with col2:
-            # Viz 7: Fraud by Hour of Day (Seaborn)
+            # Viz 7
             st.write("##### Fraud by Hour of Day")
             fig, ax = plt.subplots(figsize=(10, 4))
             sns.countplot(data=filtered_df, x='hour_of_day', hue='is_fraud', ax=ax, palette='twilight')
@@ -234,7 +230,7 @@ if raw_data is not None:
             st.pyplot(fig)
 
         st.subheader("Numerical Feature Correlation")
-        # Viz 8: Correlation Heatmap (Seaborn)
+        # Viz 8
         st.write("##### Correlation Heatmap")
         num_cols = ['amount', 'time_since_last_tx_seconds', 'tx_count_last_1h', 'hour_of_day', 'is_fraud']
         corr = filtered_df[num_cols].corr()
@@ -243,16 +239,12 @@ if raw_data is not None:
         st.pyplot(fig)
 
 
-    #Fraud Model
+    #Model
     elif page == "Fraud Model & Simulation":
         st.header("Fraud Detection Model & Live Simulation")
 
-        # Load feature-engineered data
         df_model = advanced_feature_engineering(raw_data.copy())
-
-        # Train model
         pipeline, report, auc_score, cm, feature_names = train_model(df_model.copy())
-
         st.subheader("Model Performance")
 
         col1, col2 = st.columns(2)
@@ -263,7 +255,7 @@ if raw_data is not None:
             st.text(report)
 
         with col2:
-            # Viz 9: Confusion Matrix (Seaborn)
+            # Viz 9
             st.write("##### Confusion Matrix")
             fig, ax = plt.subplots()
             sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=ax,
@@ -273,7 +265,7 @@ if raw_data is not None:
             ax.set_ylabel("Actual")
             st.pyplot(fig)
 
-        # Viz 10: Feature Importance (Plotly)
+        # Viz 10
         st.write("##### Model Feature Importance")
 
         try:
@@ -301,7 +293,6 @@ if raw_data is not None:
         st.sidebar.subheader("Live Fraud Simulation")
         st.sidebar.write("Test the model with a new transaction:")
 
-        # Create input fields
         amount = st.sidebar.number_input("Amount:", min_value=0.0, value=150.0)
         location = st.sidebar.selectbox("Location:", options=raw_data['location'].unique())
         device = st.sidebar.selectbox("Device:", options=raw_data['device'].unique())
@@ -311,7 +302,6 @@ if raw_data is not None:
         tx_count_last_1h = st.sidebar.number_input("Transactions in Last Hour:", min_value=0, value=1)
 
         if st.sidebar.button("Predict Fraud", use_container_width=True):
-            # Create a DataFrame from the inputs
             input_data = pd.DataFrame({
                 'amount': [amount],
                 'location': [location],
